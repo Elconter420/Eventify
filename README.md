@@ -3,7 +3,6 @@
 <div align="center">
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Status](https://img.shields.io/badge/status-en%20desarrollo-orange.svg)
 
 **Plataforma intuitiva para crear, gestionar y promocionar eventos de manera eficiente**
@@ -20,7 +19,6 @@
 - [🏗️ Arquitectura](#️-arquitectura)
 - [🎯 Estado Actual](#-estado-actual)
 - [🤝 Contribución](#-contribución)
-- [📄 Licencia](#-licencia)
 
 ---
 
@@ -133,12 +131,6 @@ eventify/
 - Commits convencionales
 - ESLint + Prettier obligatorios
 - Code review requerido antes de merge
-
----
-
-## **📄 Licencia**
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
