@@ -1,0 +1,24 @@
+{
+  "info": {
+    "name": "Eventify API",
+    "description": "Colección para testing de Eventify"
+  },
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registrar Organizador",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"organizador@ejemplo.com\",\n  \"password\": \"password123\",\n  \"fullName\": \"Juan Organizador\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
