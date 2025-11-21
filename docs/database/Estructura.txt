@@ -1,0 +1,85 @@
+🏗️ Estructura de Tablas
+Organizers
+
+    Almacena información de organizadores
+
+    Email único para registro/login
+
+    Passwords hasheadas con bcrypt
+
+Events
+
+    Eventos creados por organizadores
+
+    Validaciones: fecha futura, límites razonables
+
+    Relación 1:N con organizers
+
+Attendees
+
+    Asistentes registrados en eventos
+
+    Restricción única: email por evento
+
+    Relación 1:N con events
+
+🔧 Características Técnicas
+UUIDs
+
+    Todos los IDs son UUIDv4
+
+    Mejor para distributed systems
+
+    Generados con gen_random_uuid()
+
+Triggers
+
+    updated_at se actualiza automáticamente
+
+    Función reusable update_updated_at_column()
+
+Índices
+
+    Optimizados para consultas frecuentes
+
+    Búsquedas por email, fechas, estados
+
+📈 Vistas y Funciones
+event_summary
+
+Vista con información consolidada:
+
+    Conteo de asistentes actual
+
+    Cupos restantes
+
+    Estado de registro
+
+can_register_to_event()
+
+Función que valida si un email puede registrarse:
+
+    Verifica cupos disponibles
+
+    Valida fecha del evento
+
+    Revisa email único por evento
+
+🧪 Datos de Prueba
+Organizers de Ejemplo
+
+    Tech Events Co. - Eventos tecnológicos
+
+    María González - Organizadora comunitaria
+
+    Universidad Central - Eventos académicos
+
+Eventos de Prueba
+
+    Conferencia Tecnología (150 cupos)
+
+    Taller React (30 cupos)
+
+    Meetup PostgreSQL (80 cupos)
+
+    Evento Lleno (2 cupos - para testing)
