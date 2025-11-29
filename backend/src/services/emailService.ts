@@ -1,13 +1,25 @@
 import { Resend } from 'resend';
 
 class EmailService {
-  private resend: Resend;
+  private resend: Resend | null = null;
 
   constructor() {
-    this.resend = new Resend(process.env.RESEND_API_KEY);
+    const apiKey = process.env.RESEND_API_KEY;
+    
+    if (!apiKey || apiKey === 'tu_api_key_de_resend_aqui') {
+      console.warn('⚠️  RESEND_API_KEY no configurada. servicio de email en modo simulación.');
+      this.resend = null;
+    } else {
+      this.resend = new Resend(apiKey);
+    }
   }
 
   async sendTestEmail(to: string, subject: string = 'Test Email from Eventify') {
+    if (!this.resend) {
+      console.log('📧 [MODO SIMULACIÓN] Email a:', to, 'Asunto:', subject);
+      return { id: 'simulated-' + Date.now(), message: 'Email simulado (configura RESEND_API_KEY)' };
+    }
+    
     try {
       const { data, error } = await this.resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL!,
@@ -29,6 +41,11 @@ class EmailService {
   }
 
   async sendEmail(to: string, subject: string, html: string): Promise<any> {
+  if (!this.resend) {
+    console.log('📧 [MODO SIMULACIÓN] Email a:', to, 'Asunto:', subject);
+    return { id: 'simulated-' + Date.now(), message: 'Email simulado (configura RESEND_API_KEY)' };
+  }
+  
   try {
     const { data, error } = await this.resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
