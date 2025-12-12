@@ -1,6 +1,6 @@
 // backend/src/controllers/emailController.ts
 import { Request, Response } from 'express';
-import { emailService } from '../services/emailService';
+import emailService from '../services/emailService';
 
 export const sendTestEmail = async (req: Request, res: Response) => {
   try {
