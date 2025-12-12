@@ -4,9 +4,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Configuración del pool de conexiones
+const getEnv = (key: string): string => {
+  const v = process.env[key];
+  if (!v) {
+    throw new Error(`Environment variable ${key} is required`);
+  }
+  return v;
+};
+
+// Configuración del pool de conexiones (DATABASE_URL validada)
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: getEnv('DATABASE_URL'),
   // Opciones adicionales para mejor performance
   max: 20, // máximo de clientes en el pool
   idleTimeoutMillis: 30000, // cierra clientes inactivos después de 30s

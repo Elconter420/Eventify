@@ -22,3 +22,24 @@ export interface EventInput {
   cover_image?: string;
   is_active?: boolean;
 }
+
+export interface Attendee {
+  id: string;
+  event_id: string;
+  email: string;
+  full_name: string;
+  phone?: string;
+  additional_fields?: Record<string, any>;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  confirmation_token?: string;
+  confirmed_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface AttendeeInput {
+  email: string;
+  full_name: string;
+  phone?: string;
+  additional_fields?: Record<string, any>;
+}

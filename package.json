@@ -1,5 +1,11 @@
 {
   "devDependencies": {
     "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "@types/nodemailer": "^7.0.4",
+    "@types/uuid": "^10.0.0",
+    "nodemailer": "^7.0.11",
+    "uuid": "^13.0.0"
   }
 }
