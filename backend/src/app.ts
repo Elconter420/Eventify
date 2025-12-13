@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 // Importar rutas
 import emailRoutes from './routes/emailRoutes';
+import { publicRouter } from './routes/publicRoutes';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // Registrar rutas
 app.use('/api/email', emailRoutes);
+app.use('/api/public', publicRouter);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {

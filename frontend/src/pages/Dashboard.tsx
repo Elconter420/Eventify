@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
 
   const getStatusBadge = (event: Event) => {
     if (!event.is_active) {
-      return <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">Completado</span>;
+      return <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">Inactivo</span>;
     }
     
     const eventDate = new Date(event.date);

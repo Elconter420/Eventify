@@ -1,43 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Mail, Send } from 'lucide-react';
 import Layout from '../components/Layout';
+import { eventService } from '../services/eventService';
+import type { Event } from '../types';
 
 const Communications: React.FC = () => {
-  const [formData, setFormData] = useState({
-    recipients: '',
-    subject: '',
-    message: '',
-  });
+  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState<string>('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [summary, setSummary] = useState<null | { totalRecipients: number; sent: number; failed: number }>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      setPageLoading(true);
+      setError('');
+      try {
+        const data = await eventService.getMyEvents();
+        setEvents(data);
+        setSelectedEventId((prev) => prev || (data[0]?.id || ''));
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'No se pudieron cargar los eventos');
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
+  const selectedEvent = useMemo(
+    () => events.find((e) => e.id === selectedEventId) || null,
+    [events, selectedEventId]
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Aquí iría la lógica para enviar el email
-    setTimeout(() => {
-      alert('Mensaje enviado correctamente');
-      setFormData({ recipients: '', subject: '', message: '' });
+    setError('');
+    setSummary(null);
+
+    if (!selectedEventId) {
+      setError('Selecciona un evento');
       setLoading(false);
-    }, 1000);
+      return;
+    }
+
+    try {
+      const result = await eventService.sendCommunication(selectedEventId, {
+        subject,
+        message,
+      });
+      setSummary(result.summary);
+      setSubject('');
+      setMessage('');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'No se pudo enviar la comunicación');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const recentCommunications = [
-    {
-      id: 1,
-      subject: 'Reminder: University Fair is next week',
-      sent: '2 days ago',
-    },
-    {
-      id: 2,
-      subject: 'Welcome to the University Fair',
-      sent: '1 week ago',
-    },
-    {
-      id: 3,
-      subject: 'University Fair Registration Open',
-      sent: '2 weeks ago',
-    },
-  ];
+  if (pageLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-600">Cargando...</div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -48,51 +83,61 @@ const Communications: React.FC = () => {
               <Mail size={40} className="text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">Compose New Message</h3>
-            <p className="text-gray-600 text-sm">
-              Craft and send a new communication to your attendees.
-            </p>
+            <p className="text-gray-600 text-sm">Craft and send a new communication to your attendees.</p>
           </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+
+          {summary && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
+              Envío procesado: {summary.sent}/{summary.totalRecipients} enviados
+              {summary.failed ? `, ${summary.failed} fallidos` : ''}.
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Recipients
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Evento</label>
               <select
                 required
-                value={formData.recipients}
-                onChange={(e) => setFormData({ ...formData, recipients: e.target.value })}
+                value={selectedEventId}
+                onChange={(e) => setSelectedEventId(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
               >
-                <option value="">Select recipients</option>
-                <option value="all">All Attendees - University Fair</option>
-                <option value="confirmed">Confirmed Attendees Only</option>
-                <option value="pending">Pending Attendees Only</option>
+                <option value="">Selecciona un evento</option>
+                {events.map((ev) => (
+                  <option key={ev.id} value={ev.id}>
+                    {ev.title}
+                  </option>
+                ))}
               </select>
+              {selectedEvent ? (
+                <p className="text-xs text-gray-500 mt-1">Se enviará a asistentes activos del evento.</p>
+              ) : null}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Subject
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
               <input
                 type="text"
                 required
-                value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
                 placeholder="Enter subject here"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Message
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
               <textarea
                 required
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Compose your message here"
                 rows={6}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
@@ -110,34 +155,25 @@ const Communications: React.FC = () => {
               </button>
               <button
                 type="button"
+                onClick={() => {
+                  setSubject('');
+                  setMessage('');
+                  setSummary(null);
+                  setError('');
+                }}
                 className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                Save as Draft
+                Limpiar
               </button>
             </div>
           </form>
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-6">
-            Recent Communications
-          </h3>
-
-          <div className="space-y-4">
-            {recentCommunications.map((comm) => (
-              <div
-                key={comm.id}
-                className="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-              >
-                <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                  <Mail size={24} className="text-indigo-600" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-medium text-gray-800">{comm.subject}</h4>
-                  <p className="text-sm text-gray-500">Sent: {comm.sent}</p>
-                </div>
-              </div>
-            ))}
+          <h3 className="text-xl font-semibold text-gray-800 mb-6">Nota</h3>
+          <div className="border border-gray-200 rounded-lg p-4 text-sm text-gray-600">
+            Esta función envía correos a los asistentes activos del evento usando SMTP.
+            Si SMTP no está configurado, el backend puede caer en modo simulación y no enviar correos reales.
           </div>
         </div>
       </div>

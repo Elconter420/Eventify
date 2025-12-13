@@ -20,6 +20,7 @@ import morgan from 'morgan';
 import emailRoutes from './routes/emailRoutes';
 import authRoutes from './routes/authRoutes';
 import eventRoutes from './routes/eventRoutes';
+import { publicRouter } from './routes/publicRoutes';
 
 import { testConnection, query } from './config/database';
 
@@ -41,6 +42,9 @@ console.log('✅ Email routes registered');
 
 app.use('/api/events', eventRoutes);
 console.log('✅ Event routes registered');
+
+app.use('/api/public', publicRouter);
+console.log('✅ Public routes registered');
 
 // Ruta de salud
 app.get('/api/health', async (req, res) => {

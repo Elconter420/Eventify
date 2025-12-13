@@ -5,10 +5,13 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Events from './pages/Events';
 import CreateEvent from './pages/CreateEvent';
+import EventDetails from './pages/EventDetails';
+import EditEvent from './pages/EditEvent';
 import Attendees from './pages/Attendees';
 import Communications from './pages/Communications';
 import Settings from './pages/Settings';
 import PublicEventRegister from './pages/PublicEventRegister';
+import PublicCancelRegistration from './pages/PublicCancelRegistration';
 import './App.css';
 
 // Protected Route Component
@@ -31,6 +34,7 @@ function AppRoutes() {
     <Routes>
       {/* Public Routes */}
       <Route path="/event/:eventId/register" element={<PublicEventRegister />} />
+      <Route path="/event/:eventId/cancel/:attendeeId" element={<PublicCancelRegistration />} />
       
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
@@ -48,6 +52,24 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Events />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/events/:eventId"
+        element={
+          <ProtectedRoute>
+            <EventDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/events/:eventId/edit"
+        element={
+          <ProtectedRoute>
+            <EditEvent />
           </ProtectedRoute>
         }
       />

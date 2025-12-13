@@ -30,39 +30,49 @@ async function runMigration() {
     console.log('Asegurando extensión pgcrypto...');
     await client.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
 
-    // Leer archivo SQL
+    // Leer archivo SQL (solo si faltan tablas base). El schema.sql no es idempotente.
+    const baseTables = await client.query(
+      `SELECT table_name
+       FROM information_schema.tables
+       WHERE table_schema = 'public'
+         AND table_name IN ('organizers', 'events')`
+    );
+    const baseTableNames = new Set(baseTables.rows.map((r: any) => String(r.table_name)));
+    const hasBaseSchema = baseTableNames.has('organizers') && baseTableNames.has('events');
+
     const sqlPath = path.resolve(__dirname, '../../../docs/database/schema.sql');
-    if (fs.existsSync(sqlPath)) {
+    if (!hasBaseSchema && fs.existsSync(sqlPath)) {
       console.log('Ejecutando schema.sql...\n');
       const sqlScript = fs.readFileSync(sqlPath, 'utf-8');
       if (sqlScript.trim()) {
-        // Ejecutar el script SQL
         await client.query(sqlScript);
       }
+    } else if (hasBaseSchema) {
+      console.log('Schema base ya existe; saltando schema.sql para evitar duplicados.\n');
     } else {
       console.log('No se encontró docs/database/schema.sql, se continuará con migraciones locales.\n');
     }
 
+    // Asegurar tabla de attendees (esquema mínimo para el proyecto actual)
     await client.query(`
       CREATE TABLE IF NOT EXISTS attendees (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-        email VARCHAR(255) NOT NULL,
         full_name VARCHAR(100) NOT NULL,
-        phone VARCHAR(20),
-        additional_fields JSONB,
-        status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled')),
-        confirmation_token VARCHAR(255) UNIQUE,
-        confirmed_at TIMESTAMP,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(event_id, email)
+        email VARCHAR(255) NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        status VARCHAR(20) DEFAULT 'registered',
+        CONSTRAINT unique_email_per_event UNIQUE (event_id, email)
       );
 
       CREATE INDEX IF NOT EXISTS idx_attendees_event_id ON attendees(event_id);
       CREATE INDEX IF NOT EXISTS idx_attendees_email ON attendees(email);
-      CREATE INDEX IF NOT EXISTS idx_attendees_confirmation_token ON attendees(confirmation_token);
+      CREATE INDEX IF NOT EXISTS idx_attendees_created_at ON attendees(created_at);
     `);
+
+    // Si la tabla ya existía (por schema.sql), asegurar la columna status para filtrar por estado del asistente.
+    await client.query(`ALTER TABLE attendees ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'registered';`);
+    await client.query(`UPDATE attendees SET status = 'registered' WHERE status IS NULL;`);
 
     console.log('Migración completada exitosamente!\n');
     console.log('\nBase de datos lista para usar!');

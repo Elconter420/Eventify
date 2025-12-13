@@ -39,7 +39,7 @@ const Register: React.FC = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-600 mb-2">Eventify</h1>
-          <p className="text-gray-600">Create your organizer account</p>
+                <p className="text-gray-600">Crea tu cuenta de organizador</p>
         </div>
 
         {error && (
@@ -51,35 +51,35 @@ const Register: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
+                    Nombre completo
             </label>
             <input
               type="text"
               required
               value={formData.full_name}
               onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              placeholder="John Doe"
+                    placeholder="Juan Pérez"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
+                    Correo electrónico
             </label>
             <input
               type="email"
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="you@example.com"
+                    placeholder="tu@correo.com"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+                    Contraseña
             </label>
             <input
               type="password"
@@ -96,14 +96,14 @@ const Register: React.FC = () => {
             disabled={loading}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+                  {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Already have an account?{' '}
+                ¿Ya tienes cuenta?{' '}
           <Link to="/login" className="text-indigo-600 hover:underline font-medium">
-            Sign in
+                  Iniciar sesión
           </Link>
         </p>
       </div>

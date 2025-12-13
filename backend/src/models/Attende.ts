@@ -5,6 +5,7 @@ export interface Attendee {
   full_name: string;
   email: string;
   created_at: Date;
+  status?: 'registered' | 'cancelled' | string;
 }
 
 export interface AttendeeInput {

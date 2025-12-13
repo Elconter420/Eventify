@@ -26,6 +26,11 @@ export const eventIdParamSchema = z.object({
   eventId: z.string().uuid('Invalid event ID'),
 });
 
+export const attendeeCancelParamSchema = z.object({
+  eventId: z.string().uuid('Invalid event ID'),
+  attendeeId: z.string().uuid('Invalid attendee ID'),
+});
+
 export type RegisterAttendeeInput = {
   email: string;
   full_name: string;

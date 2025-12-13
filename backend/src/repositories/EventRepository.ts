@@ -84,9 +84,32 @@ export class EventRepository extends BaseRepository {
 
   async getAttendeeCount(eventId: string): Promise<number> {
     const result = await query(
-      'SELECT COUNT(*) as count FROM attendees WHERE event_id = $1',
+      `SELECT COUNT(*) as count
+       FROM attendees
+       WHERE event_id = $1
+         AND COALESCE(status, 'registered') <> 'cancelled'`,
       [eventId]
     );
     return parseInt(result.rows[0].count);
+  }
+
+  async getAttendees(eventId: string) {
+    const result = await query(
+      'SELECT * FROM attendees WHERE event_id = $1 ORDER BY created_at DESC',
+      [eventId]
+    );
+    return result.rows;
+  }
+
+  async getActiveAttendees(eventId: string) {
+    const result = await query(
+      `SELECT *
+       FROM attendees
+       WHERE event_id = $1
+         AND COALESCE(status, 'registered') <> 'cancelled'
+       ORDER BY created_at DESC`,
+      [eventId]
+    );
+    return result.rows;
   }
 }

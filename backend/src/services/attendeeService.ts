@@ -1,7 +1,6 @@
 import { pool } from '../config/database';
 import { v4 as uuidv4 } from 'uuid';
-import crypto from 'crypto';
-import { Attendee, AttendeeInput } from '../models/Event';
+import { Attendee, AttendeeInput } from '../models/Attende';
 
 export class AttendeeService {
   async registerAttendee(eventId: string, data: AttendeeInput): Promise<Attendee> {
@@ -25,7 +24,10 @@ export class AttendeeService {
       const maxAttendees = parseInt(eventRow.max_attendees, 10);
 
       const countRes = await client.query(
-        `SELECT COUNT(*) as count FROM attendees WHERE event_id = $1 AND status != 'cancelled'`,
+        `SELECT COUNT(*) as count
+         FROM attendees
+         WHERE event_id = $1
+           AND COALESCE(status, 'registered') <> 'cancelled'`,
         [eventId]
       );
       const currentAttendees = parseInt(countRes.rows[0].count, 10);
@@ -35,7 +37,7 @@ export class AttendeeService {
       }
 
       const existing = await client.query(
-        `SELECT id FROM attendees WHERE event_id = $1 AND email = $2 AND status != 'cancelled'`,
+        `SELECT id FROM attendees WHERE event_id = $1 AND email = $2`,
         [eventId, data.email]
       );
       if (existing.rows.length > 0) {
@@ -43,14 +45,13 @@ export class AttendeeService {
       }
 
       const id = uuidv4();
-      const confirmationToken = crypto.randomBytes(32).toString('hex');
       const now = new Date();
 
       const insertRes = await client.query(
-        `INSERT INTO attendees (id, event_id, email, full_name, phone, additional_fields, status, confirmation_token, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-         RETURNING id, event_id, email, full_name, phone, additional_fields, status, confirmation_token, created_at, updated_at`,
-        [id, eventId, data.email, data.full_name, data.phone || null, JSON.stringify(data.additional_fields || {}), 'pending', confirmationToken, now, now]
+        `INSERT INTO attendees (id, event_id, email, full_name, created_at, status)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, event_id, email, full_name, created_at, status`,
+        [id, eventId, data.email, data.full_name, now, 'registered']
       );
 
       await client.query('COMMIT');
@@ -64,29 +65,24 @@ export class AttendeeService {
     }
   }
 
-  async confirmAttendee(token: string): Promise<Attendee> {
-    const res = await pool.query(
-      `UPDATE attendees 
-       SET status = 'confirmed', confirmed_at = NOW(), updated_at = NOW()
-       WHERE confirmation_token = $1 AND status = 'pending'
-       RETURNING id, event_id, email, full_name, phone, additional_fields, status, confirmed_at, created_at, updated_at`,
-      [token]
+  async cancelAttendee(eventId: string, attendeeId: string): Promise<Attendee> {
+    const result = await pool.query(
+      `UPDATE attendees
+       SET status = 'cancelled'
+       WHERE event_id = $1 AND id = $2
+       RETURNING id, event_id, email, full_name, created_at, status`,
+      [eventId, attendeeId]
     );
 
-    if (res.rows.length === 0) {
-      throw new Error('Invalid or expired confirmation token');
+    if (result.rows.length === 0) {
+      throw new Error('Attendee not found');
     }
 
-    return res.rows[0] as Attendee;
+    return result.rows[0] as Attendee;
   }
 
-  async getAttendeeById(id: string): Promise<Attendee | null> {
-    const res = await pool.query(
-      `SELECT id, event_id, email, full_name, phone, additional_fields, status, confirmed_at, created_at, updated_at
-       FROM attendees WHERE id = $1`,
-      [id]
-    );
-    return (res.rows[0] as Attendee) || null;
+  async confirmAttendee(_token: string): Promise<Attendee> {
+    throw new Error('Confirmation not supported by current database schema');
   }
 }
 

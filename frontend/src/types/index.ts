@@ -31,6 +31,7 @@ export interface Attendee {
   full_name: string;
   email: string;
   created_at: string;
+  status?: 'registered' | 'cancelled' | string;
 }
 
 export interface CreateEventData {

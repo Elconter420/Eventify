@@ -322,3 +322,53 @@ export const deleteEvent = async (req: Request, res: Response) => {
     });
   }
 };
+
+// GET - Obtener asistentes de un evento
+export const getEventAttendees = async (req: Request, res: Response) => {
+  try {
+    const organizerId = getOrganizerId(req);
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        error: 'MISSING_EVENT_ID',
+        message: 'Event ID is required'
+      });
+    }
+
+    console.log(' Fetching attendees for event:', id);
+
+    // Verificar que el evento pertenece al organizador
+    const event = await eventRepo.findByIdAndOrganizer(id, organizerId);
+
+    if (!event) {
+      return res.status(404).json({
+        error: 'EVENT_NOT_FOUND',
+        message: 'Event not found or access denied'
+      });
+    }
+
+    const attendees = await eventRepo.getAttendees(id);
+
+    res.json({
+      attendees,
+      count: attendees.length
+    });
+
+  } catch (error) {
+    console.error(' Get attendees error:', error);
+    
+    if (error instanceof Error && error.message === 'User not authenticated') {
+      return res.status(401).json({
+        error: 'UNAUTHORIZED',
+        message: 'User authentication required'
+      });
+    }
+
+    res.status(500).json({
+      error: 'ATTENDEES_FETCH_FAILED',
+      message: 'Error fetching attendees'
+    });
+  }
+};
+

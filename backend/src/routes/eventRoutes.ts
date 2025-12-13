@@ -5,8 +5,10 @@ import {
   getEvents, 
   getEventById, 
   updateEvent, 
-  deleteEvent 
+  deleteEvent,
+  getEventAttendees
 } from '../controllers/eventController';
+import { sendEventCommunication } from '../controllers/communicationController';
 import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
@@ -18,6 +20,8 @@ router.use(authenticateToken);
 router.post('/', createEvent);
 router.get('/', getEvents);
 router.get('/:id', getEventById);
+router.get('/:id/attendees', getEventAttendees);
+router.post('/:id/communications', sendEventCommunication);
 router.put('/:id', updateEvent);
 router.delete('/:id', deleteEvent);
 

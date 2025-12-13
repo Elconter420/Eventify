@@ -36,4 +36,16 @@ export const eventService = {
     const response = await api.get<{ attendees: Attendee[] }>(`/events/${eventId}/attendees`);
     return response.data.attendees;
   },
+
+  // Enviar comunicación masiva a asistentes de un evento
+  sendCommunication: async (
+    eventId: string,
+    payload: { subject: string; message: string }
+  ): Promise<{ summary: { totalRecipients: number; sent: number; failed: number } }> => {
+    const response = await api.post<{ summary: { totalRecipients: number; sent: number; failed: number } }>(
+      `/events/${eventId}/communications`,
+      payload
+    );
+    return response.data;
+  },
 };
