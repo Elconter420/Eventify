@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
 import { authService } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 import { getApiErrorMessage } from '../utils/apiError';
+import { useTheme } from '../context/ThemeContext';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -31,7 +34,22 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4 relative">
+      <div className="absolute top-4 right-4">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="inline-flex items-center justify-center w-11 h-11 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          title={isDark ? 'Modo claro' : 'Modo oscuro'}
+        >
+          {isDark ? (
+            <Sun size={18} className="text-gray-700 dark:text-gray-200" />
+          ) : (
+            <Moon size={18} className="text-gray-700 dark:text-gray-200" />
+          )}
+        </button>
+      </div>
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-600 mb-2">Eventify</h1>
