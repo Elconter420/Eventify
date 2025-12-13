@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {events.slice(0, 5).map((event) => (
+                {events.map((event) => (
                   <tr key={event.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                     <td className="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium">{event.title}</td>
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{formatDate(event.date)}</td>
