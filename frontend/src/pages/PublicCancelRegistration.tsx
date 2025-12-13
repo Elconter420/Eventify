@@ -46,8 +46,8 @@ const PublicCancelRegistration: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Procesando cancelación...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-gray-300">Procesando cancelación...</div>
       </div>
     );
   }
@@ -55,11 +55,11 @@ const PublicCancelRegistration: React.FC = () => {
   const ok = result?.success;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
         <div
           className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-            ok ? 'bg-green-100' : 'bg-red-100'
+            ok ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'
           }`}
         >
           {ok ? (
@@ -73,10 +73,10 @@ const PublicCancelRegistration: React.FC = () => {
           )}
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
           {ok ? 'Registro cancelado' : 'No se pudo cancelar'}
         </h2>
-        <p className="text-gray-600 mb-6">{result?.message}</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">{result?.message}</p>
 
         {eventId ? (
           <Link
@@ -94,7 +94,7 @@ const PublicCancelRegistration: React.FC = () => {
           </Link>
         )}
 
-        <div className="mt-6 text-xs text-gray-500">
+        <div className="mt-6 text-xs text-gray-500 dark:text-gray-400">
           Powered by <span className="text-indigo-600 font-semibold">Eventify</span>
         </div>
       </div>

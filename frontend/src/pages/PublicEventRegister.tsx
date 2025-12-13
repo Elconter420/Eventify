@@ -80,18 +80,18 @@ const PublicEventRegister: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Cargando...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-gray-300">Cargando...</div>
       </div>
     );
   }
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Evento no encontrado</h2>
-          <p className="text-gray-600">El evento que buscas no existe o no está disponible.</p>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Evento no encontrado</h2>
+          <p className="text-gray-600 dark:text-gray-400">El evento que buscas no existe o no está disponible.</p>
         </div>
       </div>
     );
@@ -99,18 +99,18 @@ const PublicEventRegister: React.FC = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Registro Exitoso!</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">¡Registro Exitoso!</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Te hemos enviado un correo de confirmación. Por favor revisa tu bandeja de entrada.
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Te esperamos en: <strong>{event.title}</strong>
           </p>
         </div>
@@ -122,9 +122,9 @@ const PublicEventRegister: React.FC = () => {
   const isFull = availableSpots <= 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           {/* Event Header */}
           {event.cover_image && (
             <img 
@@ -135,30 +135,30 @@ const PublicEventRegister: React.FC = () => {
           )}
           
           <div className="p-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">{event.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">{event.title}</h1>
             
-            <p className="text-gray-600 mb-6 leading-relaxed">{event.description}</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">{event.description}</p>
 
             {/* Event Details */}
-            <div className="space-y-3 mb-6 border-t border-b border-gray-200 py-4">
-              <div className="flex items-center text-gray-700">
+            <div className="space-y-3 mb-6 border-t border-b border-gray-200 dark:border-gray-700 py-4">
+              <div className="flex items-center text-gray-700 dark:text-gray-300">
                 <Calendar className="w-5 h-5 mr-3 text-indigo-600" />
                 <span>{formatDate(event.date)}</span>
               </div>
               
-              <div className="flex items-center text-gray-700">
+              <div className="flex items-center text-gray-700 dark:text-gray-300">
                 <Clock className="w-5 h-5 mr-3 text-indigo-600" />
                 <span>{formatTime(event.date)}</span>
               </div>
               
               {event.location && (
-                <div className="flex items-center text-gray-700">
+                <div className="flex items-center text-gray-700 dark:text-gray-300">
                   <MapPin className="w-5 h-5 mr-3 text-indigo-600" />
                   <span>{event.location}</span>
                 </div>
               )}
               
-              <div className="flex items-center text-gray-700">
+              <div className="flex items-center text-gray-700 dark:text-gray-300">
                 <Users className="w-5 h-5 mr-3 text-indigo-600" />
                 <span>
                   {isFull ? (
@@ -183,18 +183,18 @@ const PublicEventRegister: React.FC = () => {
             ) : (
               <>
                 {/* Registration Form */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">Formulario de Registro</h2>
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Formulario de Registro</h2>
                   
                   {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                    <div className="bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
                       {error}
                     </div>
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Nombre Completo
                       </label>
                       <input
@@ -208,7 +208,7 @@ const PublicEventRegister: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Correo Electrónico
                       </label>
                       <input
@@ -222,8 +222,8 @@ const PublicEventRegister: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        ID de Estudiante <span className="text-gray-500">(Opcional)</span>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        ID de Estudiante <span className="text-gray-500 dark:text-gray-400">(Opcional)</span>
                       </label>
                       <input
                         type="text"
@@ -248,8 +248,8 @@ const PublicEventRegister: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-50 px-8 py-4 text-center border-t border-gray-200">
-            <p className="text-sm text-gray-600">
+          <div className="bg-gray-50 dark:bg-gray-900 px-8 py-4 text-center border-t border-gray-200 dark:border-gray-700">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Powered by <span className="text-indigo-600 font-semibold">Eventify</span>
             </p>
           </div>

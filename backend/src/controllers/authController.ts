@@ -147,3 +147,43 @@ export const getProfile = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    if (!req.user?.userId) {
+      return res.status(401).json({
+        error: 'UNAUTHORIZED',
+        message: 'Access token required'
+      });
+    }
+
+    const { full_name } = req.body as { full_name?: string };
+
+    if (typeof full_name !== 'string' || full_name.trim().length < 2) {
+      return res.status(400).json({
+        error: 'INVALID_FULL_NAME',
+        message: 'Full name must be at least 2 characters'
+      });
+    }
+
+    const updated = await organizerRepo.updateProfileName(req.user.userId, full_name.trim());
+
+    if (!updated) {
+      return res.status(404).json({
+        error: 'USER_NOT_FOUND',
+        message: 'User not found'
+      });
+    }
+
+    return res.json({
+      message: 'Profile updated',
+      user: updated
+    });
+  } catch (error) {
+    console.error('❌ Update profile error:', error);
+    return res.status(500).json({
+      error: 'PROFILE_UPDATE_FAILED',
+      message: 'Internal server error updating profile'
+    });
+  }
+};

@@ -48,7 +48,7 @@ const EventDetails: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-600">Cargando evento...</div>
+          <div className="text-gray-600 dark:text-gray-300">Cargando evento...</div>
         </div>
       </Layout>
     );
@@ -58,9 +58,9 @@ const EventDetails: React.FC = () => {
     return (
       <Layout>
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">No se pudo mostrar el evento</h2>
-            <p className="text-gray-600 mb-6">{error || 'Evento no encontrado'}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">No se pudo mostrar el evento</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'Evento no encontrado'}</p>
             <button
               onClick={() => navigate('/events')}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
@@ -76,18 +76,18 @@ const EventDetails: React.FC = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
           {event.cover_image ? (
             <img src={event.cover_image} alt={event.title} className="w-full h-64 object-cover" />
           ) : (
-            <div className="w-full h-64 bg-gray-100" />
+            <div className="w-full h-64 bg-gray-100 dark:bg-gray-700" />
           )}
 
           <div className="p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-2xl font-bold text-gray-800 truncate">{event.title}</h2>
-                <p className="text-gray-600 mt-2">{event.description}</p>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 truncate">{event.title}</h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-2">{event.description}</p>
               </div>
 
               <div className="flex items-center space-x-2 flex-shrink-0">
@@ -101,24 +101,24 @@ const EventDetails: React.FC = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-semibold text-gray-600 uppercase">Fecha y hora</p>
-                <p className="text-gray-800 mt-1">{formatDateTime(event.date)}</p>
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Fecha y hora</p>
+                <p className="text-gray-800 dark:text-gray-100 mt-1">{formatDateTime(event.date)}</p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-semibold text-gray-600 uppercase">Ubicación</p>
-                <p className="text-gray-800 mt-1">{event.location || '—'}</p>
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Ubicación</p>
+                <p className="text-gray-800 dark:text-gray-100 mt-1">{event.location || '—'}</p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-semibold text-gray-600 uppercase">Capacidad</p>
-                <p className="text-gray-800 mt-1">{event.max_attendees}</p>
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Capacidad</p>
+                <p className="text-gray-800 dark:text-gray-100 mt-1">{event.max_attendees}</p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-semibold text-gray-600 uppercase">Estado</p>
-                <p className="text-gray-800 mt-1">{event.is_active ? 'Activo' : 'Inactivo'}</p>
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Estado</p>
+                <p className="text-gray-800 dark:text-gray-100 mt-1">{event.is_active ? 'Activo' : 'Inactivo'}</p>
               </div>
             </div>
 

@@ -10,6 +10,66 @@
   body {
     @apply bg-gray-50 text-gray-900;
   }
+
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+
+  /* Overrides globales para clases comunes usadas en la app */
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+
+  .dark .bg-gray-50 {
+    @apply bg-gray-900;
+  }
+
+  .dark .bg-gray-100 {
+    @apply bg-gray-700;
+  }
+
+  .dark .bg-gray-200 {
+    @apply bg-gray-700;
+  }
+
+  .dark .text-gray-900 {
+    @apply text-gray-100;
+  }
+
+  .dark .text-gray-800 {
+    @apply text-gray-100;
+  }
+
+  .dark .text-gray-700 {
+    @apply text-gray-200;
+  }
+
+  .dark .text-gray-600 {
+    @apply text-gray-300;
+  }
+
+  .dark .text-gray-500 {
+    @apply text-gray-400;
+  }
+
+  .dark .border-gray-200 {
+    @apply border-gray-700;
+  }
+
+  .dark .border-gray-300 {
+    @apply border-gray-600;
+  }
+
+  .dark input,
+  .dark textarea,
+  .dark select {
+    @apply bg-gray-800 text-gray-100 border-gray-600;
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    @apply text-gray-400;
+  }
   
   /* Mejorar renderizado con zoom */
   * {
@@ -31,5 +91,23 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Estados hover comunes: mantener contraste en modo oscuro.
+     Importante: van en utilities para que queden DESPUÉS de Tailwind y ganen prioridad. */
+  .dark .hover\:bg-gray-50:hover {
+    @apply bg-gray-700;
+  }
+
+  .dark .hover\:bg-indigo-50:hover {
+    @apply bg-indigo-900;
+  }
+
+  .dark .hover\:bg-white:hover {
+    @apply bg-gray-700;
+  }
+
+  .dark .hover\:text-indigo-800:hover {
+    @apply text-indigo-300;
   }
 }

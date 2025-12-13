@@ -36,11 +36,6 @@ const Events: React.FC = () => {
     });
   };
 
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-  };
-
   const copyPublicLink = async (eventId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const publicUrl = `${window.location.origin}/event/${eventId}/register`;
@@ -53,7 +48,7 @@ const Events: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-600">Cargando eventos...</div>
+          <div className="text-gray-600 dark:text-gray-300">Cargando eventos...</div>
         </div>
       </Layout>
     );
@@ -63,7 +58,7 @@ const Events: React.FC = () => {
     <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-800">Mis Eventos</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Mis Eventos</h2>
           <button
             onClick={() => navigate('/events/new')}
             className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
@@ -74,12 +69,12 @@ const Events: React.FC = () => {
         </div>
 
         {events.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
             <Calendar size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
               No tienes eventos creados
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Comienza creando tu primer evento para empezar a gestionar inscripciones
             </p>
             <button
@@ -94,7 +89,7 @@ const Events: React.FC = () => {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden cursor-pointer"
+                className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden cursor-pointer"
                 onClick={() => navigate(`/events/${event.id}`)}
               >
                 {event.cover_image ? (
@@ -110,15 +105,15 @@ const Events: React.FC = () => {
                 )}
 
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
                     {event.title}
                   </h3>
                   
-                  <p className="text-gray-600 mb-4 line-clamp-2">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                     {event.description}
                   </p>
 
-                  <div className="space-y-2 text-sm text-gray-600">
+                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                     <div className="flex items-center space-x-2">
                       <Calendar size={16} />
                       <span>{formatDate(event.date)}</span>
@@ -139,12 +134,12 @@ const Events: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
                     <span
                       className={`px-3 py-1 rounded-full text-sm ${
                         event.is_active
-                          ? 'bg-green-100 text-green-600'
-                          : 'bg-gray-100 text-gray-600'
+                          ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-300'
+                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'
                       }`}
                     >
                       {event.is_active ? 'Activo' : 'Inactivo'}
@@ -153,7 +148,7 @@ const Events: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={(e) => copyPublicLink(event.id, e)}
-                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-lg transition-colors"
+                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
                         title="Copiar link público"
                       >
                         {copiedId === event.id ? <Check size={20} /> : <Link2 size={20} />}

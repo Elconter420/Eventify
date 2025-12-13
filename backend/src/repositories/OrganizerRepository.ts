@@ -9,6 +9,18 @@ export class OrganizerRepository extends BaseRepository {
     super('organizers');
   }
 
+  async updateProfileName(id: string, full_name: string): Promise<Pick<Organizer, 'id' | 'email' | 'full_name' | 'created_at' | 'updated_at'> | null> {
+    const result = await query(
+      `UPDATE organizers
+       SET full_name = $1, updated_at = NOW()
+       WHERE id = $2
+       RETURNING id, email, full_name, created_at, updated_at`,
+      [full_name, id]
+    );
+
+    return result.rows[0] || null;
+  }
+
   async findByEmail(email: string): Promise<Organizer | null> {
     const result = await query(
       'SELECT * FROM organizers WHERE email = $1',

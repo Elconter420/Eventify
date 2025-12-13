@@ -180,7 +180,7 @@ const Attendees: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-600">Cargando asistentes...</div>
+          <div className="text-gray-600 dark:text-gray-300">Cargando asistentes...</div>
         </div>
       </Layout>
     );
@@ -214,59 +214,59 @@ const Attendees: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Inscripciones · {selectedEventTitle}</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Inscripciones · {selectedEventTitle}</h3>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-indigo-600 transition-all duration-300"
                     style={{ width: `${registeredPercentage}%` }}
                   />
                 </div>
               </div>
-              <span className="ml-4 text-sm font-medium text-gray-700">
+              <span className="ml-4 text-sm font-medium text-gray-700 dark:text-gray-200">
                 {registeredCount} / {denominator}
               </span>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-red-500 transition-all duration-300"
                     style={{ width: `${cancelledRatePercentage}%` }}
                   />
                 </div>
               </div>
-              <span className="ml-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+              <span className="ml-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                 Cancelados: {cancelledCount}{totalCount > 0 ? ` (${Math.round(cancelledRatePercentage)}%)` : ''}
               </span>
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-300">
             <span>
-              <span className="font-medium text-gray-800">Total registros:</span> {totalCount}
+              <span className="font-medium text-gray-800 dark:text-gray-100">Total registros:</span> {totalCount}
             </span>
             <span>
-              <span className="font-medium text-gray-800">Cancelados:</span> {cancelledCount}
+              <span className="font-medium text-gray-800 dark:text-gray-100">Cancelados:</span> {cancelledCount}
             </span>
             <span>
-              <span className="font-medium text-gray-800">Mostrando (filtros):</span> {showingCount}
+              <span className="font-medium text-gray-800 dark:text-gray-100">Mostrando (filtros):</span> {showingCount}
             </span>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200 flex items-center justify-between gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-4">
             <div className="flex-1">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="relative">
                   <Search
                     size={20}
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"
                   />
                   <input
                     type="text"
@@ -281,7 +281,7 @@ const Attendees: React.FC = () => {
                   <select
                     value={selectedEventId}
                     onChange={(e) => setSelectedEventId(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-white dark:bg-gray-800"
                   >
                     <option value="all">Todos los eventos</option>
                     {events.map((ev) => (
@@ -297,7 +297,7 @@ const Attendees: React.FC = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as AttendeeStatusFilter)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-white dark:bg-gray-800"
                 >
                   <option value="all">Todos los estados</option>
                   <option value="registered">Registrados</option>
@@ -317,38 +317,38 @@ const Attendees: React.FC = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">
                     Nombre
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">
                     Evento
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">
                     Correo Electrónico
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">
                     Fecha de Inscripción
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">
                     Estado
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredAttendees.map((attendee) => (
-                  <tr key={attendee.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-gray-800 whitespace-nowrap align-middle text-left">
+                  <tr key={attendee.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
+                    <td className="px-6 py-4 text-gray-800 dark:text-gray-100 whitespace-nowrap align-middle text-left">
                       {attendee.full_name}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap align-middle text-left">
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300 whitespace-nowrap align-middle text-left">
                       {attendee.event_title || '-'}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap align-middle text-left">
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300 whitespace-nowrap align-middle text-left">
                       {attendee.email}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap align-middle text-left">
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300 whitespace-nowrap align-middle text-left">
                       {formatDate(attendee.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap align-middle text-left">{getStatusBadge(attendee)}</td>
@@ -358,7 +358,7 @@ const Attendees: React.FC = () => {
             </table>
 
             {filteredAttendees.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 {searchTerm
                   ? 'No se encontraron asistentes con ese criterio'
                   : 'No hay asistentes registrados aún'}

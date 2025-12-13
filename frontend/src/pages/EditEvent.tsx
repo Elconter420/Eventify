@@ -101,7 +101,7 @@ const EditEvent: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-600">Cargando evento...</div>
+          <div className="text-gray-600 dark:text-gray-300">Cargando evento...</div>
         </div>
       </Layout>
     );
@@ -111,9 +111,9 @@ const EditEvent: React.FC = () => {
     return (
       <Layout>
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">No se pudo editar el evento</h2>
-            <p className="text-gray-600 mb-6">{error || 'Evento no encontrado'}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">No se pudo editar el evento</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'Evento no encontrado'}</p>
             <button
               onClick={() => navigate('/events')}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
@@ -129,9 +129,9 @@ const EditEvent: React.FC = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Editar Evento</h2>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Editar Evento</h2>
             <button
               onClick={() => navigate(`/events/${eventId}`)}
               className="text-indigo-600 hover:text-indigo-800 font-medium"
@@ -141,7 +141,7 @@ const EditEvent: React.FC = () => {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+            <div className="bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200 px-4 py-3 rounded mb-6">
               {error}
             </div>
           )}
@@ -149,7 +149,7 @@ const EditEvent: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Nombre del Evento</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nombre del Evento</label>
                 <input
                   type="text"
                   required
@@ -160,7 +160,7 @@ const EditEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Capacidad Máxima</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Capacidad Máxima</label>
                 <input
                   type="number"
                   required
@@ -175,7 +175,7 @@ const EditEvent: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descripción</label>
               <textarea
                 required
                 value={formData.description}
@@ -187,7 +187,7 @@ const EditEvent: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fecha del Evento</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fecha del Evento</label>
                 <input
                   type="date"
                   required
@@ -207,7 +207,7 @@ const EditEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Hora</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hora</label>
                 <input
                   type="time"
                   required
@@ -225,7 +225,7 @@ const EditEvent: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ubicación</label>
                 <input
                   type="text"
                   value={formData.location}
@@ -236,7 +236,7 @@ const EditEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">URL del banner</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">URL del banner</label>
                 <input
                   type="text"
                   value={formData.cover_image}
@@ -248,7 +248,7 @@ const EditEvent: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <label className="flex items-center space-x-2 text-sm text-gray-700">
+              <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
                 <input
                   type="checkbox"
                   checked={formData.is_active}
@@ -259,11 +259,11 @@ const EditEvent: React.FC = () => {
               </label>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
               <button
                 type="button"
                 onClick={() => navigate(`/events/${eventId}`)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors"
               >
                 Cancelar
               </button>

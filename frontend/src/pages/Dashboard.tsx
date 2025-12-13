@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Eye, Edit, FileText, Link2, Check } from 'lucide-react';
+import { Plus, Link2, Check } from 'lucide-react';
 import Layout from '../components/Layout';
 import { eventService } from '../services/eventService';
 import type { Event } from '../types';
@@ -29,7 +29,8 @@ const Dashboard: React.FC = () => {
       // Calcular estadísticas
       const activeEvents = data.filter((e) => e.is_active).length;
       const totalRegistrations = data.reduce((sum, e) => sum + (e.current_attendees || 0), 0);
-      const upcomingEvents = data.filter((e) => new Date(e.date) > new Date()).length;
+      const now = new Date();
+      const upcomingEvents = data.filter((e) => e.is_active && new Date(e.date) > now).length;
       
       // Calcular tasa de asistencia real
       const totalCapacity = data.reduce((sum, e) => sum + e.max_attendees, 0);
@@ -97,39 +98,39 @@ const Dashboard: React.FC = () => {
       <div className="space-y-6 h-full">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-indigo-600">
             <div className="text-center">
               <p className="text-5xl font-bold text-indigo-600">{stats.activeEvents}</p>
-              <p className="text-gray-600 mt-3 font-medium">Eventos Activos</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 font-medium">Eventos Activos</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-blue-500">
             <div className="text-center">
               <p className="text-5xl font-bold text-blue-600">{stats.totalRegistrations}</p>
-              <p className="text-gray-600 mt-3 font-medium">Inscripciones Totales</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 font-medium">Inscripciones Totales</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-green-500">
             <div className="text-center">
               <p className="text-5xl font-bold text-green-600">{stats.attendanceRate}%</p>
-              <p className="text-gray-600 mt-3 font-medium">Tasa de Asistencia</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 font-medium">Tasa de Asistencia</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-purple-500">
             <div className="text-center">
               <p className="text-5xl font-bold text-purple-600">{stats.upcomingEvents}</p>
-              <p className="text-gray-600 mt-3 font-medium">Próximos Eventos</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 font-medium">Próximos Eventos</p>
             </div>
           </div>
         </div>
 
         {/* Eventos Recientes */}
-        <div className="bg-white rounded-lg shadow-md flex-1">
-          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-gray-800">Eventos Recientes</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md flex-1">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Eventos Recientes</h3>
             <button
               onClick={() => navigate('/events/new')}
               className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
@@ -141,40 +142,40 @@ const Dashboard: React.FC = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     NOMBRE DEL EVENTO
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     FECHA
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     INSCRITOS
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     ESTADO
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     ACCIONES
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {events.slice(0, 5).map((event) => (
-                  <tr key={event.id} className="hover:bg-indigo-50 transition-colors">
-                    <td className="px-6 py-4 text-gray-900 font-medium">{event.title}</td>
-                    <td className="px-6 py-4 text-gray-600">{formatDate(event.date)}</td>
+                  <tr key={event.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium">{event.title}</td>
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{formatDate(event.date)}</td>
                     <td className="px-6 py-4">
-                      <span className="text-gray-900 font-semibold">{event.current_attendees || 0}</span>
-                      <span className="text-gray-500 text-sm"> / {event.max_attendees}</span>
+                      <span className="text-gray-900 dark:text-gray-100 font-semibold">{event.current_attendees || 0}</span>
+                      <span className="text-gray-500 dark:text-gray-400 text-sm"> / {event.max_attendees}</span>
                     </td>
                     <td className="px-6 py-4">{getStatusBadge(event)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => copyPublicLink(event.id)}
-                          className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors relative"
+                          className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors relative"
                           title="Copiar link público"
                         >
                           {copiedId === event.id ? (
@@ -203,7 +204,7 @@ const Dashboard: React.FC = () => {
             </table>
 
             {events.length === 0 && (
-              <div className="text-center py-16 text-gray-500">
+              <div className="text-center py-16 text-gray-500 dark:text-gray-400">
                 <p className="text-lg mb-2">No hay eventos creados aún.</p>
                 <p className="text-sm">¡Crea tu primer evento para comenzar!</p>
               </div>

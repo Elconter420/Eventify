@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Users, Mail, Settings, LogOut, X } from 'lucide-react';
+import { LayoutDashboard, Calendar, Users, Mail, Settings, LogOut, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
@@ -28,7 +30,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-gray-50 overflow-hidden fixed inset-0">
+    <div className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 overflow-hidden fixed inset-0">
       {/* Sidebar */}
       <aside className="w-56 bg-indigo-600 text-white flex flex-col flex-shrink-0 overflow-hidden">
         {/* Logo */}
@@ -83,17 +85,26 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0 h-full">
         {/* Header */}
-        <header className="bg-white shadow-sm px-6 py-3 flex items-center justify-between flex-shrink-0">
-          <h2 className="text-xl font-bold text-gray-800 truncate">
+        <header className="bg-white dark:bg-gray-900 shadow-sm dark:shadow-none px-6 py-3 flex items-center justify-between flex-shrink-0 border-b border-transparent dark:border-gray-800">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 truncate">
             {menuItems.find((item) => isActive(item.path))?.label || 'Dashboard'}
           </h2>
           <div className="flex items-center space-x-4 min-w-0">
-            <span className="text-gray-600 truncate">{user?.full_name}</span>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              title={isDark ? 'Modo claro' : 'Modo oscuro'}
+            >
+              {isDark ? <Sun size={18} className="text-gray-700 dark:text-gray-200" /> : <Moon size={18} className="text-gray-700 dark:text-gray-200" />}
+            </button>
+            <span className="text-gray-600 dark:text-gray-300 truncate">{user?.full_name}</span>
           </div>
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-5 bg-gray-50">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-5 bg-gray-50 dark:bg-gray-900">
           <div className="max-w-full w-full">
             {children}
           </div>

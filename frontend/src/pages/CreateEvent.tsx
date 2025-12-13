@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Upload, X } from 'lucide-react';
 import Layout from '../components/Layout';
@@ -24,6 +24,45 @@ const CreateEvent: React.FC = () => {
     cover_image: '',
   });
 
+  useEffect(() => {
+    const raw = localStorage.getItem('settings');
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      const defaultEventLocation = typeof parsed?.defaultEventLocation === 'string' ? parsed.defaultEventLocation : '';
+      const defaultEventCapacity =
+        typeof parsed?.defaultEventCapacity === 'number' && parsed.defaultEventCapacity > 0
+          ? parsed.defaultEventCapacity
+          : null;
+      const defaultEventTime = typeof parsed?.defaultEventTime === 'string' ? parsed.defaultEventTime : '';
+
+      setFormData((prev) => {
+        // Solo aplicar si el usuario no ha empezado a editar campos relevantes
+        const shouldApplyLocation = !prev.location && !!defaultEventLocation;
+        const shouldApplyCapacity = prev.max_attendees === 100 && defaultEventCapacity !== null;
+
+        let nextDate = prev.date;
+        if (defaultEventTime && /^\d{2}:\d{2}$/.test(defaultEventTime)) {
+          const [hh, mm] = defaultEventTime.split(':');
+          const d = prev.date ? new Date(prev.date) : new Date();
+          if (!Number.isNaN(d.getTime())) {
+            d.setHours(Number.parseInt(hh, 10), Number.parseInt(mm, 10), 0, 0);
+            nextDate = d.toISOString();
+          }
+        }
+
+        return {
+          ...prev,
+          location: shouldApplyLocation ? defaultEventLocation : prev.location,
+          max_attendees: shouldApplyCapacity ? (defaultEventCapacity as number) : prev.max_attendees,
+          date: nextDate,
+        };
+      });
+    } catch {
+      // ignorar
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -42,19 +81,19 @@ const CreateEvent: React.FC = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Crear Nuevo Evento</h2>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Crear Nuevo Evento</h2>
             <button
               onClick={() => navigate('/events')}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
             >
               <X size={24} />
             </button>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+            <div className="bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200 px-4 py-3 rounded mb-6">
               {error}
             </div>
           )}
@@ -62,7 +101,7 @@ const CreateEvent: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Nombre del Evento
                 </label>
                 <input
@@ -76,7 +115,7 @@ const CreateEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Categoría
                 </label>
                 <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
@@ -89,7 +128,7 @@ const CreateEvent: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Descripción
               </label>
               <textarea
@@ -104,7 +143,7 @@ const CreateEvent: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Fecha del Evento
                 </label>
                 <input
@@ -129,7 +168,7 @@ const CreateEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Hora
                 </label>
                 <input
@@ -149,7 +188,7 @@ const CreateEvent: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Ubicación
                 </label>
                 <input
@@ -162,7 +201,7 @@ const CreateEvent: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Capacidad Máxima
                 </label>
                 <input
@@ -180,13 +219,13 @@ const CreateEvent: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Banner del Evento
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-indigo-500 transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-indigo-500 transition-colors cursor-pointer">
                 <Upload size={48} className="mx-auto text-gray-400 mb-4" />
                 <p className="text-indigo-600 font-medium mb-1">Sube un archivo</p>
-                <p className="text-sm text-gray-500">PNG, JPG, GIF hasta 10MB</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 10MB</p>
                 <input
                   type="text"
                   placeholder="O pega la URL de la imagen"
@@ -197,11 +236,11 @@ const CreateEvent: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
               <button
                 type="button"
                 onClick={() => navigate('/events')}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors"
               >
                 Cancelar
               </button>
