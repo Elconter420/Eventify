@@ -1,29 +1,109 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Events from './pages/Events';
+import CreateEvent from './pages/CreateEvent';
+import Attendees from './pages/Attendees';
+import Communications from './pages/Communications';
+import Settings from './pages/Settings';
+import PublicEventRegister from './pages/PublicEventRegister';
 import './App.css';
+
+// Protected Route Component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-gray-600">Cargando...</div>
+      </div>
+    );
+  }
+  
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/event/:eventId/register" element={<PublicEventRegister />} />
+      
+      {/* Auth Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/events"
+        element={
+          <ProtectedRoute>
+            <Events />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/events/new"
+        element={
+          <ProtectedRoute>
+            <CreateEvent />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/attendees"
+        element={
+          <ProtectedRoute>
+            <Attendees />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/events/:eventId/attendees"
+        element={
+          <ProtectedRoute>
+            <Attendees />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/communications"
+        element={
+          <ProtectedRoute>
+            <Communications />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Route path="*" element={<Navigate to="/dashboard" />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">🎉 Eventify</h1>
-        <p className="text-sm">Sistema de Gestión de Eventos</p>
-      </header>
-      
-      <main className="container mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            ¡Bienvenido a Eventify!
-          </h2>
-          <p className="text-gray-600">
-            Plataforma para crear y gestionar eventos de manera eficiente.
-          </p>
-          <div className="mt-4 p-4 bg-green-50 rounded border border-green-200">
-            <p className="text-green-800">
-              ✅ El proyecto ha sido inicializado correctamente
-            </p>
-          </div>
-        </div>
-      </main>
-    </div>
+    <Router>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Router>
   );
 }
 
