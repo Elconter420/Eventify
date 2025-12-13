@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { getApiErrorMessage } from '../utils/apiError';
 
 type CancelResult = {
   success: boolean;
@@ -34,7 +35,7 @@ const PublicCancelRegistration: React.FC = () => {
       } catch (err: any) {
         setResult({
           success: false,
-          message: err.response?.data?.message || 'No se pudo cancelar el registro. Intenta nuevamente.',
+          message: getApiErrorMessage(err, 'No se pudo cancelar el registro. Intenta nuevamente.'),
         });
       } finally {
         setLoading(false);

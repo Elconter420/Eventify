@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
 import api from '../services/api';
 import type { User } from '../types';
+import { getApiErrorMessage } from '../utils/apiError';
 
 type AppSettings = {
   // comunicaciones
@@ -99,7 +100,7 @@ const Settings: React.FC = () => {
       login(currentToken, response.data.user);
       setProfileSuccess('Nombre actualizado');
     } catch (err: any) {
-      setProfileError(err.response?.data?.message || 'No se pudo actualizar el nombre');
+      setProfileError(getApiErrorMessage(err, 'No se pudo actualizar el nombre'));
     } finally {
       setSavingName(false);
     }

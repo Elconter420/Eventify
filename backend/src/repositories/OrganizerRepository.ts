@@ -9,6 +9,18 @@ export class OrganizerRepository extends BaseRepository {
     super('organizers');
   }
 
+  async updatePassword(id: string, newPassword: string): Promise<boolean> {
+    const password_hash = await hashPassword(newPassword);
+    const result = await query(
+      `UPDATE organizers
+       SET password_hash = $1, updated_at = NOW()
+       WHERE id = $2`,
+      [password_hash, id]
+    );
+
+    return (result.rowCount ?? 0) > 0;
+  }
+
   async updateProfileName(id: string, full_name: string): Promise<Pick<Organizer, 'id' | 'email' | 'full_name' | 'created_at' | 'updated_at'> | null> {
     const result = await query(
       `UPDATE organizers

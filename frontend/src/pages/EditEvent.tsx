@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { eventService } from '../services/eventService';
 import type { Event, UpdateEventData } from '../types';
+import { getApiErrorMessage } from '../utils/apiError';
 
 const buildTimeOptions = (stepMinutes = 15): string[] => {
   const options: string[] = [];
@@ -117,7 +118,7 @@ const EditEvent: React.FC = () => {
           is_active: data.is_active,
         });
       } catch (err: any) {
-        setError(err.response?.data?.message || 'No se pudo cargar el evento');
+        setError(getApiErrorMessage(err, 'No se pudo cargar el evento'));
       } finally {
         setLoading(false);
       }
@@ -162,7 +163,7 @@ const EditEvent: React.FC = () => {
       await eventService.updateEvent(eventId, buildUpdatePayload());
       navigate(`/events/${eventId}`);
     } catch (err: any) {
-      const message = err.response?.data?.message || 'Error al actualizar el evento';
+      const message = getApiErrorMessage(err, 'Error al actualizar el evento');
       const detailsRaw = err.response?.data?.details;
       const details = Array.isArray(detailsRaw) ? detailsRaw.map((d: any) => mapEventValidationDetail(String(d))) : [];
       setError(message);

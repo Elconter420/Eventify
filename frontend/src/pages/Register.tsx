@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
+import { getApiErrorMessage } from '../utils/apiError';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Register: React.FC = () => {
       login(response.token, response.user);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al registrarse');
+      setError(getApiErrorMessage(err, 'Error al registrarse'));
     } finally {
       setLoading(false);
     }

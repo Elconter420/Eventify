@@ -1,6 +1,8 @@
 import api from './api';
 import type { AuthResponse } from '../types';
 
+type MessageResponse = { message: string };
+
 export const authService = {
   register: async (email: string, password: string, full_name: string): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>('/auth/register', {
@@ -16,6 +18,16 @@ export const authService = {
       email,
       password,
     });
+    return response.data;
+  },
+
+  forgotPassword: async (email: string): Promise<MessageResponse> => {
+    const response = await api.post<MessageResponse>('/auth/forgot-password', { email });
+    return response.data;
+  },
+
+  resetPassword: async (token: string, password: string): Promise<MessageResponse> => {
+    const response = await api.post<MessageResponse>('/auth/reset-password', { token, password });
     return response.data;
   },
 

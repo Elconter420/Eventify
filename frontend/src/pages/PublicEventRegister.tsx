@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import axios from 'axios';
+import { getApiErrorMessage } from '../utils/apiError';
 
 interface EventDetails {
   id: string;
@@ -54,7 +55,7 @@ const PublicEventRegister: React.FC = () => {
       await axios.post(`http://localhost:5000/api/public/attendees/register/${eventId}`, formData);
       setSuccess(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al registrarse. Intenta nuevamente.');
+      setError(getApiErrorMessage(err, 'Error al registrarse. Intenta nuevamente.'));
     } finally {
       setSubmitting(false);
     }

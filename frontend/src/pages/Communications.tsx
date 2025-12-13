@@ -3,6 +3,7 @@ import { Mail, Send } from 'lucide-react';
 import Layout from '../components/Layout';
 import { eventService } from '../services/eventService';
 import type { Event } from '../types';
+import { getApiErrorMessage } from '../utils/apiError';
 
 const Communications: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -30,7 +31,7 @@ const Communications: React.FC = () => {
         setEvents(data);
         setSelectedEventId((prev) => prev || (data[0]?.id || ''));
       } catch (err: any) {
-        setError(err.response?.data?.message || 'No se pudieron cargar los eventos');
+        setError(getApiErrorMessage(err, 'No se pudieron cargar los eventos'));
       } finally {
         setPageLoading(false);
       }
@@ -127,7 +128,7 @@ const Communications: React.FC = () => {
         const active = attendees.length - cancelled;
         setRecipientCounts({ total: attendees.length, active, cancelled });
       } catch (err: any) {
-        setRecipientsError(err.response?.data?.message || 'No se pudieron cargar los destinatarios');
+        setRecipientsError(getApiErrorMessage(err, 'No se pudieron cargar los destinatarios'));
         setRecipientCounts(null);
       } finally {
         setRecipientsLoading(false);
@@ -178,7 +179,7 @@ const Communications: React.FC = () => {
       setSubject('');
       setMessage('');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'No se pudo enviar la comunicación');
+      setError(getApiErrorMessage(err, 'No se pudo enviar la comunicación'));
     } finally {
       setLoading(false);
     }

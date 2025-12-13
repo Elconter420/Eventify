@@ -4,6 +4,7 @@ import { Upload, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import { eventService } from '../services/eventService';
 import type { CreateEventData } from '../types';
+import { getApiErrorMessage } from '../utils/apiError';
 
 const buildTimeOptions = (stepMinutes = 15): string[] => {
   const options: string[] = [];
@@ -144,7 +145,7 @@ const CreateEvent: React.FC = () => {
       await eventService.createEvent(formData);
       navigate('/events');
     } catch (err: any) {
-      const message = err.response?.data?.message || 'Error al crear el evento';
+      const message = getApiErrorMessage(err, 'Error al crear el evento');
       const detailsRaw = err.response?.data?.details;
       const details = Array.isArray(detailsRaw) ? detailsRaw.map((d: any) => mapEventValidationDetail(String(d))) : [];
       setError(message);

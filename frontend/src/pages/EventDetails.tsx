@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { eventService } from '../services/eventService';
 import type { Event } from '../types';
+import { getApiErrorMessage } from '../utils/apiError';
 
 const EventDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const EventDetails: React.FC = () => {
         const data = await eventService.getEvent(eventId);
         setEvent(data);
       } catch (err: any) {
-        setError(err.response?.data?.message || 'No se pudo cargar el evento');
+        setError(getApiErrorMessage(err, 'No se pudo cargar el evento'));
       } finally {
         setLoading(false);
       }
